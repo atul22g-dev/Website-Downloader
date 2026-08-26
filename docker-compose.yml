@@ -1,0 +1,31 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: website-downloader
+    ports:
+      - "3000:3000"
+    volumes:
+      - downloads:/app/downloads
+      - sites:/app/public/sites
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      - DOWNLOAD_QUOTA=100m
+      - DOWNLOAD_TIMEOUT_MS=300000
+      - MAX_CONCURRENT_DOWNLOADS=5
+      - MAX_DOWNLOADS_PER_IP=2
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  downloads:
+    driver: local
+  sites:
+    driver: local

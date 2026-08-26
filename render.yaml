@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: website-downloader
+    env: docker
+    plan: free
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_OPTIONS
+        value: "--max-old-space-size=384"
+      - key: DOWNLOAD_QUOTA
+        value: "50m"
+      - key: DOWNLOAD_TIMEOUT_MS
+        value: "120000"
